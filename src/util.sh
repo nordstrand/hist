@@ -23,5 +23,4 @@ function checkDependenciesInPath() {
             die "$dep not found in PATH"
         fi
     done
-
 }

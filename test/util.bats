@@ -4,7 +4,7 @@
 
 @test "dateDiff returns the difference in days between two YYYY-MM-DD dates" {
   result="$(dateDiff 2014-01-01 2014-01-31)"
-  echo "WWW $result"
+
   [ "$result" = "30" ]
 }
 
