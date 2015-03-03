@@ -36,18 +36,21 @@ done
 echo "Repo:   ${GIT_DIR}" >&2
 echo "Output: ${OUTPUT_FILE}" >&2
 
-TAGS=($(getTagsByDate ${GIT_DIR}))
-RECENT_DATE=$(getDateForCommit ${GIT_DIR} ${TAGS[0]})
+
+function invokeGnuPlot {
+    gnuplot <(cat ${SCRIPTDIR}/git.gp | sed "s/_outputfile_/${OUTPUT_FILE}/")
+}
 
 function plot() {
     local gitDir="$1"
     local fromGitRef="$2"
     local toGitRef="$3"
-    
-    getCommitDates "$gitDir" "$fromGitRef" "$toGitRef" |  while read -r line; do echo $(dateDiff $line $RECENT_DATE); done | gnuplot <(cat ${SCRIPTDIR}/git.gp | sed "s/_outputfile_/${OUTPUT_FILE}/")
+    [ -n "$4" ] &&  local baseLineDate="$4" || local baseLineDate="$(getDateForCommit ${GIT_DIR} ${toGitRef})"
 
+    getCommitDates "$gitDir" "$fromGitRef" "$toGitRef" |  while read -r line; do echo $(dateDiff $line $baseLineDate); done |\
+    invokeGnuPlot
 }
 
 
-
+TAGS=($(getTagsByDate ${GIT_DIR}))
 plot ${GIT_DIR} ${TAGS[1]} ${TAGS[0]}
