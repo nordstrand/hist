@@ -24,3 +24,12 @@ function checkDependenciesInPath() {
         fi
     done
 }
+
+function show_help() {
+cat << EOF
+ -C <path>
+     Process repository in <path>
+ -h 
+     Show help"
+EOF
+}

@@ -6,16 +6,32 @@ SCRIPTDIR="$(dirname $0)"
 . ${SCRIPTDIR}/util.sh
 . ${SCRIPTDIR}/git.sh
 
-GIT_DIR=$1
+
+GIT_DIR=$(pwd)
+
+while getopts "hC:" opt; do
+  case $opt in
+    C)
+      echo "Processing repo: $OPTARG" >&2
+      GIT_DIR="$OPTARG"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+      ;;
+    h)
+      show_help
+      exit 0
+      ;;
+  esac
+done 
 
 TAGS=($(getTagsByDate ${GIT_DIR}))
-
-echo ${TAGS[0]}
-echo ${TAGS[1]}
-
-
 RECENT_DATE=$(getDateForCommit ${GIT_DIR} ${TAGS[0]})
-
 
 function plot() {
     local gitDir="$1"
@@ -27,6 +43,5 @@ function plot() {
 }
 
 
- 
 
 plot ${GIT_DIR} ${TAGS[1]} ${TAGS[0]}
