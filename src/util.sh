@@ -29,7 +29,9 @@ function show_help() {
 cat << EOF
  -C <path>
      Process repository in <path>
+ -O <file>
+     Write graph to <file>
  -h 
-     Show help"
+     Show help
 EOF
 }

@@ -1,5 +1,5 @@
 set terminal png
-set output "graph.png"
+set output "_outputfile_"
 
 
 binwidth=5

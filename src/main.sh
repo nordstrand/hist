@@ -8,12 +8,15 @@ SCRIPTDIR="$(dirname $0)"
 
 
 GIT_DIR=$(pwd)
+OUTPUT_FILE="graph.png"
 
-while getopts "hC:" opt; do
+while getopts "hC:O:" opt; do
   case $opt in
     C)
-      echo "Processing repo: $OPTARG" >&2
       GIT_DIR="$OPTARG"
+      ;;
+    O)
+      OUTPUT_FILE="$OPTARG"
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -28,7 +31,10 @@ while getopts "hC:" opt; do
       exit 0
       ;;
   esac
-done 
+done
+
+echo "Repo:   ${GIT_DIR}" >&2
+echo "Output: ${OUTPUT_FILE}" >&2
 
 TAGS=($(getTagsByDate ${GIT_DIR}))
 RECENT_DATE=$(getDateForCommit ${GIT_DIR} ${TAGS[0]})
@@ -38,7 +44,7 @@ function plot() {
     local fromGitRef="$2"
     local toGitRef="$3"
     
-    getCommitDates "$gitDir" "$fromGitRef" "$toGitRef" |  while read -r line; do echo $(dateDiff $line $RECENT_DATE); done | gnuplot ${SCRIPTDIR}/git.gp
+    getCommitDates "$gitDir" "$fromGitRef" "$toGitRef" |  while read -r line; do echo $(dateDiff $line $RECENT_DATE); done | gnuplot <(cat ${SCRIPTDIR}/git.gp | sed "s/_outputfile_/${OUTPUT_FILE}/")
 
 }
 
