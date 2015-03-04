@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -o pipefail
 
 SCRIPTDIR="$(dirname $0)"
 . ${SCRIPTDIR}/util.sh
@@ -12,8 +13,14 @@ checkDependenciesInPath git gnuplot
 GIT_DIR=$(pwd)
 OUTPUT_FILE="graph.png"
 
-while getopts "hC:O:" opt; do
+while getopts "hf:t:C:O:" opt; do
   case $opt in
+    f)
+      FROM_REV="$OPTARG"
+      ;;
+    t)
+      TO_REV="$OPTARG"
+      ;;
     C)
       GIT_DIR="$OPTARG"
       ;;
@@ -48,11 +55,16 @@ function plot() {
     local fromGitRef="$2"
     local toGitRef="$3"
     [ -n "$4" ] &&  local baseLineDate="$4" || local baseLineDate="$(getDateForCommit ${GIT_DIR} ${toGitRef})"
+    
+    echo "Plotting $fromGitRef..$toGitRef with age baseline $baseLineDate" >&2
 
     getCommitDates "$gitDir" "$fromGitRef" "$toGitRef" |  while read -r line; do echo $(dateDiff $line $baseLineDate); done |\
     invokeGnuPlot
 }
 
-
-TAGS=($(getTagsByDate ${GIT_DIR}))
-plot ${GIT_DIR} ${TAGS[1]} ${TAGS[0]}
+if [ -z "$FROM_REV" ]; then
+    TAGS=($(getTagsByDate ${GIT_DIR}))
+    plot ${GIT_DIR} ${TAGS[1]} ${TAGS[0]}
+else
+    plot ${GIT_DIR} ${FROM_REV} ${TO_REV}
+fi
