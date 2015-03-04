@@ -1,5 +1,4 @@
 function getTagsByDate() {
-
     local gitDir="$1"
     
     git -C "$gitDir" for-each-ref \
@@ -9,7 +8,6 @@ function getTagsByDate() {
 
 
 function getCommitDates() {
-
     local gitDir="$1"
     local fromGitRef="$2"
     local toGitRef="$3"
@@ -19,9 +17,8 @@ function getCommitDates() {
 
 
 function getDateForCommit() {
-
     local gitDir="$1"
     local gitRef="$2"
 
-    git -C "$gitDir" show --quiet --pretty=format:%ad --date=short "$gitRef"
+    getCommitDates "$gitDir" "${gitRef}^" "${gitRef}" 
 }

@@ -57,6 +57,7 @@ function plot() {
     echo "Plotting $fromGitRef..$toGitRef with age baseline $baseLineDate" >&2
 
     [ -z "$OUTPUT_FILE" ] && OUTPUT_FILE="graph_$baseLineDate.png"
+    
     echo "Output: ${OUTPUT_FILE}" >&2
     
     getCommitDates "$gitDir" "$fromGitRef" "$toGitRef" |  while read -r line; do echo $(dateDiff $line $baseLineDate); done |\
