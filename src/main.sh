@@ -7,6 +7,8 @@ SCRIPTDIR="$(dirname $0)"
 . ${SCRIPTDIR}/git.sh
 
 
+checkDependenciesInPath git gnuplot
+
 GIT_DIR=$(pwd)
 OUTPUT_FILE="graph.png"
 
