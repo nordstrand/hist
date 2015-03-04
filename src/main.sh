@@ -11,7 +11,6 @@ SCRIPTDIR="$(dirname $0)"
 checkDependenciesInPath git gnuplot
 
 GIT_DIR=$(pwd)
-OUTPUT_FILE="graph.png"
 
 while getopts "hf:t:C:O:" opt; do
   case $opt in
@@ -43,7 +42,6 @@ while getopts "hf:t:C:O:" opt; do
 done
 
 echo "Repo:   ${GIT_DIR}" >&2
-echo "Output: ${OUTPUT_FILE}" >&2
 
 
 function invokeGnuPlot {
@@ -58,13 +56,27 @@ function plot() {
     
     echo "Plotting $fromGitRef..$toGitRef with age baseline $baseLineDate" >&2
 
+    [ -z "$OUTPUT_FILE" ] && OUTPUT_FILE="graph_$baseLineDate.png"
+    echo "Output: ${OUTPUT_FILE}" >&2
+    
     getCommitDates "$gitDir" "$fromGitRef" "$toGitRef" |  while read -r line; do echo $(dateDiff $line $baseLineDate); done |\
     invokeGnuPlot
+    OUTPUT_FILE=""
 }
 
-if [ -z "$FROM_REV" ]; then
+function plotAllTags() {
     TAGS=($(getTagsByDate ${GIT_DIR}))
-    plot ${GIT_DIR} ${TAGS[1]} ${TAGS[0]}
+    
+    for a in $(seq 0 ${#TAGS[@]}); do 
+        if [ -n "${TAGS[$a]}" ] && [ -n "${TAGS[$(($a + 1))]}" ]; then
+            plot ${GIT_DIR} ${TAGS[$(($a + 1))]} ${TAGS[$a]}
+        fi
+    done
+}
+
+
+if [ -z "$FROM_REV" ]; then
+    plotAllTags
 else
     plot ${GIT_DIR} ${FROM_REV} ${TO_REV}
 fi
