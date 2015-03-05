@@ -1,5 +1,16 @@
+
+function assertGitRepo() {
+    local gitDir="$1"
+    
+    [ -d "$gitDir/.git" ] || { echo "No git repository found in $gitDir" ; exit; }
+    
+}
+
+
 function getTagsByDate() {
     local gitDir="$1"
+    
+    assertGitRepo "$gitDir"
     
     git -C "$gitDir" for-each-ref \
     --format='%(*committerdate:raw)%(committerdate:raw) %(refname) %(*objectname) ' refs/tags |\
@@ -12,6 +23,8 @@ function getCommitDates() {
     local fromGitRef="$2"
     local toGitRef="$3"
     
+    assertGitRepo "$gitDir"
+    
     git -C "$gitDir" log --format=%ad --date=short "$fromGitRef..$toGitRef"
 }
 
@@ -19,6 +32,8 @@ function getCommitDates() {
 function getDateForCommit() {
     local gitDir="$1"
     local gitRef="$2"
+    
+    assertGitRepo "$gitDir"
 
     getCommitDates "$gitDir" "${gitRef}^" "${gitRef}" 
 }
