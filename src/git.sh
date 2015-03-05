@@ -35,5 +35,5 @@ function getDateForCommit() {
     
     assertGitRepo "$gitDir"
 
-    getCommitDates "$gitDir" "${gitRef}^" "${gitRef}" 
+    git -C "$gitDir" log --format=%ad --date=short -1 "${gitRef}"
 }
