@@ -27,12 +27,16 @@ function checkDependenciesInPath() {
 
 function show_help() {
 cat << EOF
- -f <revision>
+ -f <frevision>
      First revision of development cycle
- -t <revision>
+ -t <trevision>
      Last revision of development cycle
  -C <path>
      Process repository in <path>
+ -n <name>
+     Repository name, defaults to top-level folder name
+ -r <release>
+     Release name, defaults to <trevision>
  -O <file>
      Write graph to <file>
  -h 

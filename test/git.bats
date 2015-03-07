@@ -21,6 +21,12 @@
 
 @test "getDateForCommit should return YYYY-MM-DD date for commit" {
     result="$(getDateForCommit test/testrepo HEAD~3)"
-echo "=========== $result"
+
     [ ${result} = "2015-02-27" ]
+}
+
+@test "getRepositoryName returns name of repo" {
+    result="$(getRepositoryName test/testrepo)"
+
+    [ ${result} = "testrepo" ]
 }

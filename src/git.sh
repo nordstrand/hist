@@ -28,6 +28,15 @@ function getCommitDates() {
     git -C "$gitDir" log --format=%ad --date=short "$fromGitRef..$toGitRef"
 }
 
+function getRepositoryName() {
+    local gitDir="$1"
+    
+    assertGitRepo "$gitDir"
+    
+    basename $(git -C "$gitDir" rev-parse --show-toplevel)
+}
+
+
 
 function getDateForCommit() {
     local gitDir="$1"

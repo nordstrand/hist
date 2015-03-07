@@ -7,6 +7,7 @@ set boxwidth binwidth
 
 bin(x,width)=width*floor(x/width) + width/2.0
 
+set title "Commit age distribution for release _release_ of _repository_"
 set xlabel "Age in days"
 set ylabel "Number of commits"
 

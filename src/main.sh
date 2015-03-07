@@ -12,8 +12,14 @@ checkDependenciesInPath git gnuplot
 
 GIT_DIR=$(pwd)
 
-while getopts "hf:t:C:O:" opt; do
+while getopts "hr:n:f:t:C:O:" opt; do
   case $opt in
+    r)
+      RELEASE_NAME="$OPTARG"
+      ;;
+    n)
+      REPO_NAME="$OPTARG"
+      ;;
     f)
       FROM_REV="$OPTARG"
       ;;
@@ -45,7 +51,11 @@ echo "Repo:   ${GIT_DIR}" >&2
 
 
 function invokeGnuPlot {
-    gnuplot <(cat ${SCRIPTDIR}/git.gp | sed "s/_outputfile_/${OUTPUT_FILE}/")
+    gnuplot <(cat ${SCRIPTDIR}/git.gp | sed\
+        -e "s/_outputfile_/${OUTPUT_FILE}/"\
+        -e "s/_repository_/${REPO_NAME}/"\
+        -e "s/_release_/${RELEASE_NAME}/"\
+    )
 }
 
 function plot() {
@@ -59,6 +69,10 @@ function plot() {
     [ -z "$OUTPUT_FILE" ] && OUTPUT_FILE="graph_$baseLineDate.png"
     
     echo "Output: ${OUTPUT_FILE}" >&2
+    
+    [ -z "$REPO_NAME" ] && REPO_NAME="$(getRepositoryName $gitDir)"
+    [ -z "$RELEASE_NAME" ] && RELEASE_NAME="$toGitRef"
+    
     
     getCommitDates "$gitDir" "$fromGitRef" "$toGitRef" |  while read -r line; do echo $(dateDiff $line $baseLineDate); done |\
     invokeGnuPlot
