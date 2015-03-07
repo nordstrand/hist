@@ -1,6 +1,6 @@
 language: c
 before_install: git clone https://github.com/sstephenson/bats.git
-script: bin/bats --tap test
+script: bats/bin/bats --tap test/
 notifications:
   email:
     on_success: never
