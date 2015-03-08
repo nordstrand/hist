@@ -1,5 +1,7 @@
 language: c
-before_install: git clone https://github.com/sstephenson/bats.git
+before_install:
+  - git clone https://github.com/sstephenson/bats.git
+  - git -C test/ clone testrepo.bundle testrepo -b master
 script: bats/bin/bats --tap test/
 notifications:
   email:
