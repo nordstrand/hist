@@ -16,12 +16,12 @@
 }
 
 @test "checkDependenciesInPath returns true if dependencies are found" {
-  run checkDependenciesInPath ls cp cd
+  run checkDependenciesInPath git
   [ "$status" -eq 0 ]
 }
 
 @test "checkDependenciesInPath returns false if dependencies are not found" {
-  run checkDependenciesInPath ls cp cd foobarqwer
+  run checkDependenciesInPath git foobarqwer
 
   [ "$status" -eq 1 ]
   [ "$output" = "foobarqwer not found in PATH" ]
