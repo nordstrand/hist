@@ -68,7 +68,7 @@ function plot() {
 
     [ -z "$OUTPUT_FILE" ] && OUTPUT_FILE="graph_$baseLineDate.png"
     [ -z "$REPO_NAME" ] && REPO_NAME="$(getRepositoryName $gitDir)"
-    [ -z "$RELEASE_NAME" ] && RELEASE_NAME="$toGitRef"
+    [ -z "$RELEASE_NAME" ] && RELEASE_NAME="${toGitRef#refs/tags/}"
     
     echo "Output:  ${OUTPUT_FILE}" >&2
     echo "Name:    ${REPO_NAME}" >&2
@@ -77,6 +77,7 @@ function plot() {
     getCommitDates "$gitDir" "$fromGitRef" "$toGitRef" |  while read -r line; do echo $(dateDiff $line $baseLineDate); done |\
     invokeGnuPlot
     OUTPUT_FILE=""
+    RELEASE_NAME=""
 }
 
 function plotAllTags() {
