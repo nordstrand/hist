@@ -12,7 +12,7 @@ checkDependenciesInPath git gnuplot
 
 GIT_DIR=$(pwd)
 
-while getopts "hr:n:f:t:C:O:m:" opt; do
+while getopts "hr:n:f:t:C:O:m:x:" opt; do
   case $opt in
     r)
       RELEASE_NAME="$OPTARG"
@@ -31,6 +31,9 @@ while getopts "hr:n:f:t:C:O:m:" opt; do
       ;;
     m)
       MAX_DAYS="$OPTARG"
+      ;;
+    x)
+      EXCLUDE_TAGS_FILTER="$OPTARG"
       ;;
     O)
       OUTPUT_FILE="$OPTARG"
@@ -85,8 +88,13 @@ function plot() {
 }
 
 function plotAllTags() {
-    TAGS=($(getTagsByDate ${GIT_DIR}))
-    
+    if [ -n "$EXCLUDE_TAGS_FILTER" ]; then
+        echo "Excluding tags matching: ${EXCLUDE_TAGS_FILTER}"
+        TAGS=($(getTagsByDate ${GIT_DIR} | grep -Ev ${EXCLUDE_TAGS_FILTER}))
+    else
+        TAGS=($(getTagsByDate ${GIT_DIR}))
+    fi
+
     for a in $(seq 0 ${#TAGS[@]}); do 
         if [ -n "${TAGS[$a]}" ] && [ -n "${TAGS[$(($a + 1))]}" ]; then
             plot ${GIT_DIR} ${TAGS[$(($a + 1))]} ${TAGS[$a]}

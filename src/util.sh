@@ -50,5 +50,7 @@ cat << EOF
      Write graph to <file>
  -h 
      Show help
+ -x <reg exp>
+     Disregard tags matching <reg exp> when scanning for releases to plot
 EOF
 }
