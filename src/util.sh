@@ -3,10 +3,10 @@ function die() { echo "$@"; exit 1; }
 
 function timeStampFromDateString() {
     if [ "$(uname)" == "Darwin" ]; then
-		echo $(date -j -f "%Y-%M-%d" "$1" "+%s")
-	else
-		echo $(date --date="$1" +%s)
-	fi
+	    echo $(date -j -u -f "%Y-%m-%d %H:%M:%S" "$1 00:00:00" +%s)
+    else
+	    echo $(date --date="$1" +%s)
+    fi
 }
 
 function dateDiff() {

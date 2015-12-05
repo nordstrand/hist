@@ -8,6 +8,13 @@
   [ "$result" = "30" ]
 }
 
+@test "dateDiff returns the difference in days between two YYYY-MM-DD dates in different months" {
+  result="$(dateDiff 2014-01-31 2014-02-01)"
+
+  [ "$result" = "1" ]
+}
+
+
 @test "dateDiff prints error if invoked with dates in inverted order" {
   run dateDiff 2014-01-02 2014-01-01
 
