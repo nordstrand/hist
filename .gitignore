@@ -1,3 +1,5 @@
 *.swp
 test/testrepo
 bats/
+.DS_Store
+graph_*.png
