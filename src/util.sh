@@ -1,10 +1,17 @@
 
 function die() { echo "$@"; exit 1; }
 
+function timeStampFromDateString() {
+    if [ "$(uname)" == "Darwin" ]; then
+		echo $(date -j -f "%Y-%M-%d" "$1" "+%s")
+	else
+		echo $(date --date="$1" +%s)
+	fi
+}
 
 function dateDiff() {
-    local fromDate=$(date --date="$1" +%s)
-    local toDate=$(date --date="$2" +%s)
+    local fromDate=$(timeStampFromDateString $1)
+    local toDate=$(timeStampFromDateString $2)
     
     [[ $toDate < $fromDate ]] && die "$1 is after $2"
     
