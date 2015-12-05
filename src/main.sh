@@ -12,7 +12,7 @@ checkDependenciesInPath git gnuplot
 
 GIT_DIR=$(pwd)
 
-while getopts "hr:n:f:t:C:O:" opt; do
+while getopts "hr:n:f:t:C:O:m:" opt; do
   case $opt in
     r)
       RELEASE_NAME="$OPTARG"
@@ -28,6 +28,9 @@ while getopts "hr:n:f:t:C:O:" opt; do
       ;;
     C)
       GIT_DIR="$OPTARG"
+      ;;
+    m)
+      MAX_DAYS="$OPTARG"
       ;;
     O)
       OUTPUT_FILE="$OPTARG"
@@ -55,6 +58,7 @@ function invokeGnuPlot {
         -e "s|_outputfile_|$OUTPUT_FILE|"\
         -e "s|_repository_|$REPO_NAME|"\
         -e "s|_release_|$RELEASE_NAME|"\
+        -e "s|_maxdays_|$MAX_DAYS|"\
     )
 }
 

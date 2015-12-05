@@ -42,6 +42,8 @@ cat << EOF
      Process repository in <path>
  -n <name>
      Repository name, defaults to top-level folder name
+ -m <max days>
+     Fix x axis maximum to <max days>, older commits will not be plotted
  -r <release>
      Release name, defaults to <trevision>
  -O <file>

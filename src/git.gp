@@ -18,7 +18,7 @@ set border 3
 set xtics nomirror
 set ytics nomirror
 set style fill solid 0.2
-set xrange [ 0 : ]
+set xrange [ 0 : _maxdays_ ]
 set yrange [ 0 : ]
 
 
