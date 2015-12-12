@@ -12,10 +12,9 @@ function timeStampFromDateString() {
 function dateDiff() {
     local fromDate=$(timeStampFromDateString $1)
     local toDate=$(timeStampFromDateString $2)
-    
+
     [[ $toDate < $fromDate ]] && die "$1 is after $2"
-    
-    
+
     echo $(( (${toDate} - ${fromDate})/(60*60*24) ))
 }
 
@@ -48,7 +47,7 @@ cat << EOF
      Release name, defaults to <trevision>
  -O <file>
      Write graph to <file>
- -h 
+ -h
      Show help
  -x <reg exp>
      Disregard tags matching <reg exp> when scanning for releases to plot
