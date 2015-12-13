@@ -70,17 +70,17 @@ function plot() {
     local fromGitRef="$2"
     local toGitRef="$3"
     [ -n "$4" ] &&  local baseLineDate="$4" || local baseLineDate="$(getDateForCommit ${GIT_DIR} ${toGitRef})"
-    
+
     echo "Plotting $fromGitRef..$toGitRef with age baseline $baseLineDate" >&2
 
     [ -z "$OUTPUT_FILE" ] && OUTPUT_FILE="graph_$baseLineDate.png"
     [ -z "$REPO_NAME" ] && REPO_NAME="$(getRepositoryName $gitDir)"
     [ -z "$RELEASE_NAME" ] && RELEASE_NAME="${toGitRef#refs/tags/}"
-    
+
     echo "Output:  ${OUTPUT_FILE}" >&2
     echo "Name:    ${REPO_NAME}" >&2
     echo "Release: ${RELEASE_NAME}" >&2
-    
+
     getCommitDates "$gitDir" "$fromGitRef" "$toGitRef" |  while read -r line; do echo $(dateDiff $line $baseLineDate); done |\
     invokeGnuPlot
     OUTPUT_FILE=""
@@ -95,7 +95,7 @@ function plotAllTags() {
         TAGS=($(getTagsByDate ${GIT_DIR}))
     fi
 
-    for a in $(seq 0 ${#TAGS[@]}); do 
+    for a in $(seq 0 ${#TAGS[@]}); do
         if [ -n "${TAGS[$a]}" ] && [ -n "${TAGS[$(($a + 1))]}" ]; then
             plot ${GIT_DIR} ${TAGS[$(($a + 1))]} ${TAGS[$a]}
         fi
